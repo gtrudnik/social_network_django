@@ -1,0 +1,138 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Friends
+{% endblock %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/timeline.css'%}" rel="stylesheet">
+<div class="row" style="padding-left:70px;">
+            <div class="col-6 content">
+
+
+<form method="post" name="new-friendrequest-form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+<table>
+    <tr>
+        <td>
+            <input type="text" name="receiver_name" class="form-control" maxlength="100" required id="id_receiver_name">
+            </td>
+        <td>
+            <div style="padding-left:10px;">
+                <button class="btn btn-dark btn-lg" type="submit">Send friend request</button>
+
+            </div>
+
+        </td>
+    </tr>
+</table>
+<br>
+</form>
+            </div>
+</div>
+
+
+
+<div class="container">
+        <div class="row">
+            <div class="col-6 content">
+                <h1>Your friend requests:</h1>
+                <div class="timeline">
+                    {% for your_friendrequest in your_friendrequests %}
+                        <div class="card">
+                            <div class="card-body">
+                                <a href="{% url 'profile_page' your_friendrequest.receiver %}" class="nav-link px-2 link-dark" style="font-weight: bold;">
+                                    <img src="{{ your_friendrequest.receiver.profile.avatar.url}}" alt="mdo" width="32" height="32" class="rounded-circle" style="cursor: pointer; border: 1px solid black; ">
+                                {{ your_friendrequest.receiver }}</a>
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <button class="btn btn-dark btn-lg" name="cancel" type="submit" value="{{ your_friendrequest.receiver }}">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<div class="container">
+
+        <div class="row">
+            <div class="col-6 content">
+                <h1>Friend requests (incoming):</h1>
+                <div class="timeline">
+                    {% for friendrequest in friendrequests %}
+                        <div class="card">
+                            <div class="card-body">
+                                <a href="{% url 'profile_page' friendrequest %}" class="nav-link px-2 link-dark" style="font-weight: bold;">
+                                    <img src="{{ friendrequest.sender.profile.avatar.url}}" alt="mdo" width="32" height="32" class="rounded-circle" style="cursor: pointer; border: 1px solid black; ">
+                                {{ friendrequest.sender }}</a>
+                                <table>
+    <tr>
+        <td>
+            <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+
+                                    <button class="btn btn-dark btn-lg" name="accept" type="submit" value="{{ friendrequest }}">Accept</button>
+                                </form></td>
+        <td>
+            <div style="padding-left:7px;">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <button class="btn btn-dark btn-lg" name="decline" type="submit" value="{{ friendrequest }}">Decline</button>
+                                </form>
+            </div>
+
+        </td>
+    </tr>
+</table>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-6 content">
+                <h1>Friends:</h1>
+                <div class="timeline">
+                    {% for friend in friendlists.friends.all %}
+                        {% if friend.username != user.username %}
+                        <div class="card">
+                            <div class="card-body">
+                                <a href="{% url 'profile_page' friend.username %}" class="nav-link px-2 link-dark" style="font-weight: bold;">
+                                    <img src="{{ friend.profile.avatar.url}}" alt="mdo" width="32" height="32" class="rounded-circle" style="cursor: pointer; border: 1px solid black; ">
+                                {{ friend.username }}</a>
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <button class="btn btn-dark btn-lg" name="delete" type="submit" value="{{ friend.username }}">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block navbar %}
+<li><a href="/news" class="nav-link px-2 link-dark">News</a></li>
+<li><a href="/friends" class="nav-link px-2 link-secondary">Friends</a></li>
+<li><a href="/add_post" class="nav-link px-2 link-dark">Add post</a></li>
+<li><a href="{% url 'profile_page' user.username %}" class="nav-link px-2 link-dark">My page</a></li>
+{% endblock %}

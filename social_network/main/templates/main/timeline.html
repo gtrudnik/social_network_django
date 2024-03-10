@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+News
+{% endblock %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/timeline.css'%}" rel="stylesheet">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 content">
+                <div class="timeline">
+                    {% for post in posts %}
+                        {% if post.author in friendlists.friends.all and post.author != user %}
+                        <div class="card">
+                            <div class="card-body">
+                                <a href="{% url 'profile_page' post.author.username %}" class="nav-link px-2 link-dark" style="font-weight: bold;"><img src="{{ post.author.profile.avatar.url}}" alt="mdo" width="32" height="32" class="rounded-circle" style="cursor: pointer; border: 1px solid black; ">
+                                {{ post.author.username}}</a>
+                                {{ post.text }}
+                                {% if post.image.name %}
+                                    <img src="{{ post.image.url }}" class="img-thumbnail">
+                                {% endif %}
+                                <br>
+                                <div class="post-datetime">
+                                    {{ post.datetime|date:"d M Y H:i" }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block navbar %}
+<li><a href="/news" class="nav-link px-2 link-secondary">News</a></li>
+<li><a href="/friends" class="nav-link px-2 link-dark">Friends</a></li>
+<li><a href="/add_post" class="nav-link px-2 link-dark">Add post</a></li>
+<li><a href="{% url 'profile_page' user.username %}" class="nav-link px-2 link-dark">My page</a></li>
+{% endblock %}

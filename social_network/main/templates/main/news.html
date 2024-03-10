@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+News
+{% endblock %}
+
+{% block navbar %}
+<li><a href="/news" class="nav-link px-2 link-secondary">News</a></li>
+<li><a href="/friends" class="nav-link px-2 link-dark">Friends</a></li>
+<li><a href="/add_post" class="nav-link px-2 link-dark">Add post</a></li>
+<li><a href="{% url 'profile_page' user.username %}" class="nav-link px-2 link-dark">My page</a></li>
+{% endblock %}

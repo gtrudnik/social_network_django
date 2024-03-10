@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Edit profile
+{% endblock %}
+
+{% block content %}
+{% if user_form.errors %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <div id="form_errors">
+                {% for key, value in user_form.errors.items %}
+                    <strong>{{ value }}</strong>
+                {% endfor %}
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+{% endif %}
+    <div class="form-content" style="padding-left:70px;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <h1 class="h3 mb-3 fw-normal">Username:</h1>
+                            {{ user_form.username }}<br>
+                        <h1 class="h3 mb-3 fw-normal">Email:</h1>
+                            {{ user_form.email }}<br>
+                        <h1 class="h3 mb-3 fw-normal">Change Avatar:</h1>
+                        <input type="file" name="avatar" class="form-control form-control-sm" accept="image/*" id="id_avatar">
+                    </div>
+                    <br><h1 class="h3 mb-3 fw-normal">Bio:</h1> {{ profile_form.bio }}
+                </div>
+            </div>
+            <br><br>
+            <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
+            <button type="reset" class="btn btn-dark btn-lg">Reset</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block navbar %}
+<li><a href="/news" class="nav-link px-2 link-dark">News</a></li>
+<li><a href="/friends" class="nav-link px-2 link-dark">Friends</a></li>
+<li><a href="/add_post" class="nav-link px-2 link-dark">Add post</a></li>
+<li><a href="{% url 'profile_page' user.username %}" class="nav-link px-2 link-dark">My page</a></li>
+{% endblock %}
